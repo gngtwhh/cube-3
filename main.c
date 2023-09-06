@@ -19,5 +19,7 @@ int main() {
     /*for(int i=0;i<20;++i)
         printf("%d ",f_scramble[i]);*/
     formular_output(f_scramble);
+
+
     return 0;
 }

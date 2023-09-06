@@ -14,6 +14,29 @@ void cube_init(cube c) {
     }
 }
 
+// rotary operations
+// rotating Rubik's cube
+void cube_rotating(cube c, enum rotary rot) {
+    int lump_temp[3] = {0};
+    int *trans[4][3]; // rotation transform queue
+    int (*face)[3][3]; // face rotate
+    trans_init(trans, c, rot); // init trans
+    face_init(face, c, rot); //init face
+    switch (rot % 4) {
+        case 0:
+            clockwise_90(trans, face);
+            break;
+        case 1:
+            anticlockwise_90(trans, face);
+            break;
+        case 2://向下"跟随"(?)
+        case 3:
+            rotate_180(trans, face);
+            break;
+    }
+}
+
+
 // enter a formula and return a formula object
 void formular_input(formula f) {
     //不使用字符数组对应是要方便程序找到公式,下标转换的逻辑有点乱
@@ -32,7 +55,7 @@ void formular_input(formula f) {
             if (c == ' ') {
                 //顺时针90度
                 f[idx++] = (face - 1) * 4 + 0;
-            } else if (c == '_') {
+            } else if (c == '\'') {
                 //逆时针90度
                 f[idx++] = (face - 1) * 4 + 1;
             } else if (c == '2') {
@@ -42,7 +65,7 @@ void formular_input(formula f) {
                 if (c2 == ' ') {
                     //顺时针180度
                     f[idx++] = (face - 1) * 4 + 2;
-                } else if (c2 == '_') {
+                } else if (c2 == '\'') {
                     //逆时针180度
                     f[idx++] = (face - 1) * 4 + 3;
                 } else if (c2 == '\n') {
@@ -64,17 +87,17 @@ void formular_input(formula f) {
 void formular_output(formula f) {
     //因为使用了枚举进行映射,这里要使用一个对应的字符串数组来进行反映射
     const char *rotary_str[24] = {
-            "U", "U_", "U2", "U2_",
-            "D", "D_", "D2", "D2_",
-            "F", "F_", "F2", "F2_",
-            "B", "B_", "B2", "B2_",
-            "L", "L_", "L2", "L2_",
-            "R", "R_", "R2", "R2_",
+            "U", "U'", "U2", "U2'",
+            "D", "D'", "D2", "D2'",
+            "F", "F'", "F2", "F2'",
+            "B", "B'", "B2", "B2'",
+            "L", "L'", "L2", "L2'",
+            "R", "R'", "R2", "R2'",
     };
     int idx = 0;
     enum rotary r = f[idx++];
     while (r != END) {
-        printf("%s ",rotary_str[r]);
+        printf("%s ", rotary_str[r]);
         r = f[idx++];
     }
     putchar('\n');
@@ -98,4 +121,60 @@ int isface(char c) {
         default:
             return 0;
     }
+}
+
+// init trans array
+void trans_init(int *trans[4][3], cube c, enum rotary rot) {
+    //面编号:U 1,D 2,F 3,B 4,L 5,R 6
+    //对应到数组下标时减一
+    int focus_face=(rot-(rot%4))/4+1; //旋转的焦点面
+    //焦点面相邻的4个面---优先从U和F开始,顺时针遍历
+    int adjacent_face[6][4]={
+            {3,5,4,6},
+            {3,6,4,5},
+            {1,6,2,5},
+            {1,5,2,6},
+            {1,3,2,4},
+            {1,4,2,3}
+    };
+    //相邻面需要变换的色块编号---[0]存所在行,[1-3]存所在列
+    int trans_list[6][4][4]={
+            {
+                    {3,3,2,1},
+                    {1,1,2,3},
+                    {1,1,2,3},
+                    {1,1,2,3},
+                },
+            {
+                    {3,3,2,1},
+                    {3,3,2,1},
+                    {3,3,2,1},
+                    {3,3,2,1}
+                },
+            {
+                    {3,},
+                    {},
+                    {},
+                    {}
+                },
+            {
+                    {},
+                    {},
+                    {},
+                    {}
+                },
+            {
+                    {},
+                    {},
+                    {},
+                    {}
+                },
+            {
+                    {},
+                    {},
+                    {},
+                    {}
+                }
+    };
+
 }
