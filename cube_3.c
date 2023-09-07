@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include <string.h>
+#include <windows.h>
 #include "cube_3.h"
 
 // initialize the Rubik's cube
 void cube_init(cube c) {
     for (int i = 0; i < 7; ++i) {
-//        memset(c[i],i,sizeof(c[i]));
-        for (int j = 1; j < 4; ++j) {
-            for (int k = 1; k < 4; ++k) {
+        for (int j = 0; j < 4; ++j) {
+            for (int k = 0; k < 4; ++k) {
                 c[i][j][k] = i;
             }
         }
@@ -17,25 +17,206 @@ void cube_init(cube c) {
 // rotary operations
 // rotating Rubik's cube
 void cube_rotating(cube c, enum rotary rot) {
-    int lump_temp[3] = {0};
-    int *trans[4][3]; // rotation transform queue
-    int (*face)[3][3]; // face rotate
-    trans_init(trans, c, rot); // init trans
-    face_init(face, c, rot); //init face
+    int focus_face = (rot - (rot % 4)) / 4 + 1; //旋转的焦点面
     switch (rot % 4) {
         case 0:
-            clockwise_90(trans, face);
+            clockwise_90(c, focus_face);
             break;
         case 1:
-            anticlockwise_90(trans, face);
+            anticlockwise_90(c, focus_face);
             break;
         case 2://向下"跟随"(?)
         case 3:
-            rotate_180(trans, face);
+            rotate_180(c, focus_face);
             break;
     }
 }
 
+// clockwise rotate 90
+void clockwise_90(cube c, int focus_face) {
+    /*
+        {3, 5, 4, 6},
+        {3, 6, 4, 5},
+        {1, 6, 2, 5},
+        {1, 5, 2, 6},
+        {1, 3, 2, 4},
+        {1, 4, 2, 3}
+     */
+    int temp[3];
+
+    //旋转焦点面侧棱
+    switch (focus_face) {
+        case 1: {
+            //backup 3
+            temp[0] = c[3][1][1];
+            temp[1] = c[3][1][2];
+            temp[2] = c[3][1][3];
+            //6->3
+            c[3][1][1] = c[6][1][1];
+            c[3][1][2] = c[6][1][2];
+            c[3][1][3] = c[6][1][3];
+            //4->6
+            c[6][1][1] = c[4][1][1];
+            c[6][1][2] = c[4][1][2];
+            c[6][1][3] = c[4][1][3];
+            //5->4
+            c[4][1][1] = c[5][1][1];
+            c[4][1][2] = c[5][1][2];
+            c[4][1][3] = c[5][1][3];
+            //temp(3)->5
+            c[5][1][1] = temp[0];
+            c[5][1][2] = temp[1];
+            c[5][1][3] = temp[2];
+        }
+            break;
+        case 2: {
+            //backup 3
+            temp[0] = c[3][3][1];
+            temp[1] = c[3][3][2];
+            temp[2] = c[3][3][3];
+            //5->3
+            c[3][3][1] = c[5][3][1];
+            c[3][3][2] = c[5][3][2];
+            c[3][3][3] = c[5][3][3];
+            //4->5
+            c[5][3][1] = c[4][3][1];
+            c[5][3][2] = c[4][3][2];
+            c[5][3][3] = c[4][3][3];
+            //6->4
+            c[4][3][1] = c[6][3][1];
+            c[4][3][2] = c[6][3][2];
+            c[4][3][3] = c[6][3][3];
+            //temp(3)->6
+            c[6][3][1] = temp[0];
+            c[6][3][2] = temp[1];
+            c[6][3][3] = temp[2];
+        }
+            break;
+        case 3: {
+            //backup 1
+            temp[0] = c[1][3][3];
+            temp[1] = c[1][3][2];
+            temp[2] = c[1][3][1];
+            //5->1
+            c[1][3][3] = c[5][1][3];
+            c[1][3][2] = c[5][2][3];
+            c[1][3][1] = c[5][3][3];
+            //2->5
+            c[5][1][3] = c[2][1][1];
+            c[5][2][3] = c[2][1][2];
+            c[5][3][3] = c[2][1][3];
+            //6->2
+            c[2][1][1] = c[6][3][1];
+            c[2][1][2] = c[6][2][1];
+            c[2][1][3] = c[6][1][1];
+            //temp(1)->6
+            c[6][3][1] = temp[0];
+            c[6][2][1] = temp[1];
+            c[6][1][1] = temp[2];
+        }
+            break;
+        case 4: {
+            //backup 1
+            temp[0] = c[1][1][1];
+            temp[1] = c[1][1][2];
+            temp[2] = c[1][1][3];
+            //6->1
+            c[1][1][1] = c[6][1][3];
+            c[1][1][2] = c[6][2][3];
+            c[1][1][3] = c[6][3][3];
+            //2->6
+            c[6][1][3] = c[2][3][3];
+            c[6][2][3] = c[2][3][2];
+            c[6][3][3] = c[2][3][1];
+            //5->2
+            c[2][3][3] = c[5][3][1];
+            c[2][3][2] = c[5][2][1];
+            c[2][3][1] = c[5][1][1];
+            //temp(1)->5
+            c[5][3][1] = temp[0];
+            c[5][2][1] = temp[1];
+            c[5][1][1] = temp[2];
+        }
+            break;
+        case 5: {
+            //backup 1
+            temp[0] = c[1][3][1];
+            temp[1] = c[1][2][1];
+            temp[2] = c[1][1][1];
+            //4->1
+            c[1][3][1] = c[4][1][3];
+            c[1][2][1] = c[4][2][3];
+            c[1][1][1] = c[4][3][3];
+            //2->4
+            c[4][1][3] = c[2][3][1];
+            c[4][2][3] = c[2][2][1];
+            c[4][3][3] = c[2][1][1];
+            //3->2
+            c[2][3][1] = c[3][3][1];
+            c[2][2][1] = c[3][2][1];
+            c[2][1][1] = c[3][1][1];
+            //temp(1)->3
+            c[3][3][1] = temp[0];
+            c[3][2][1] = temp[1];
+            c[3][1][1] = temp[2];
+        }
+            break;
+        case 6: {
+            //backup 1
+            temp[0] = c[1][1][3];
+            temp[1] = c[1][2][3];
+            temp[2] = c[1][3][3];
+            //3->1
+            c[1][1][3] = c[3][1][3];
+            c[1][2][3] = c[3][2][3];
+            c[1][3][3] = c[3][3][3];
+            //2->3
+            c[3][1][3] = c[2][1][3];
+            c[3][2][3] = c[2][2][3];
+            c[3][3][3] = c[2][3][3];
+            //4->2
+            c[2][1][3] = c[4][3][1];
+            c[2][2][3] = c[4][2][1];
+            c[2][3][3] = c[4][1][1];
+            //temp(1)->4
+            c[4][3][1] = temp[0];
+            c[4][2][1] = temp[1];
+            c[4][1][1] = temp[2];
+        }
+            break;
+    }
+
+    //旋转焦点面矩阵
+    for (int j = 0; j < 3; ++j)
+        focus_face_anticlockwise_90(c, focus_face);
+}
+
+// anticlockwise rotate 90
+void anticlockwise_90(cube c, int focus_face) {
+    //待优化
+    for (int i = 0; i < 3; ++i) {
+        clockwise_90(c, focus_face);
+    }
+}
+
+// rotate 180
+void rotate_180(cube c, int focus_face) {
+    //待优化
+    for (int i = 0; i < 2; ++i) {
+        clockwise_90(c, focus_face);
+    }
+}
+
+// The square matrix rotates clockwise
+void focus_face_anticlockwise_90(cube c, int focus_face) {
+    int i, j, temp[3][3];
+    for (i = 0; i < 3; ++i)
+        for (j = 0; j < 3; ++j)
+            temp[3 - j - 1][i] = c[focus_face][i+1][j+1];
+    for (i = 0; i < 3; ++i)
+        for (j = 0; j < 3; ++j)
+            c[focus_face][i+1][j+1] = temp[i][j];
+}
 
 // enter a formula and return a formula object
 void formular_input(formula f) {
@@ -82,6 +263,7 @@ void formular_input(formula f) {
             }
         }
     }
+    f[idx] = END;
 }
 
 void formular_output(formula f) {
@@ -102,6 +284,74 @@ void formular_output(formula f) {
     }
     putchar('\n');
 }
+
+//print the cube as 3D img
+void cube_print(cube c) {
+    printf("                            ________________\n"
+           "                            |  %d |  %d |  %d |\n"
+           "                            +----+----+----+\n"
+           "                            |  %d |  %d |  %d |\n"
+           "                            +----+----+----+\n"
+           "                            |  %d |  %d |  %d |\n"
+           "                            +----+----+----+\n"
+           "                           /  %d / %d  / %d  /|\n"
+           "                          /____/____/____/ |\n"
+           "                         /  %d /  %d /  %d /|%d+ \n"
+           "                        /____/____/____/ |/|\n"
+           "                       /  %d /  %d /  %d /|%d|%d|\n"
+           "        ______________/____/____/____/%d|/|/|\n"
+           "        | %d |  %d |  %d |  %d |  %d |  %d |/|%d+%d|\n"
+           "        +---+----+----+----+----+----+%d|/|/\n"
+           "        | %d |  %d |  %d |  %d |  %d |  %d |/|%d+\n"
+           "        +---+----+----+----+----+----+%d|/\n"
+           "        | %d |  %d |  %d |  %d |  %d |  %d |/\n"
+           "        +---+----+----+----+----+----+\n"
+           "                      |  %d |  %d |  %d |\n"
+           "                      +----+----+----+\n"
+           "                      |  %d |  %d |  %d |\n"
+           "                      +----+----+----+\n"
+           "                      |  %d |  %d |  %d |\n"
+           "                      +----+----+----+\n",
+           c[4][3][3], c[4][3][2], c[4][3][1],
+           c[4][2][3], c[4][2][2], c[4][2][1],
+           c[4][1][3], c[4][1][2], c[4][1][1],
+
+           c[1][1][1], c[1][1][2], c[1][1][3],
+           c[1][2][1], c[1][2][2], c[1][2][3],
+           c[6][1][3],
+
+           c[1][3][1], c[1][3][2], c[1][3][3],
+           c[6][1][2],c[6][2][3], c[6][1][1],
+
+           c[5][1][1], c[5][1][2], c[5][1][3], c[3][1][1], c[3][1][2], c[3][1][3],
+           c[6][2][2], c[6][3][3], c[6][2][1],
+           c[5][2][1], c[5][2][2], c[5][2][3], c[3][2][1], c[3][2][2], c[3][2][3],
+           c[6][3][2], c[6][3][1],
+           c[5][3][1], c[5][3][2], c[5][3][3], c[3][3][1], c[3][3][2], c[3][3][3],
+
+           c[2][1][1], c[2][1][2], c[2][1][3],
+           c[2][2][1], c[2][2][2], c[2][2][3],
+           c[2][3][1], c[2][3][2], c[2][3][3]
+    );
+}
+
+/*// get color by block id
+int getcolor(int block){
+    //6-黄,7-白,3-蓝,2-绿,12-橙,5-红
+    int trans_clr[7]={0,6,7,3,2,12,5};
+    return trans_clr[block];
+}
+
+// set console color
+void set_color(int i) {//更改文字颜色
+    //SetConsoleTextAttribute是API设置控制台窗口字体颜色和背景色的函数
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), i);
+}
+
+// return color str
+char *get_color_str(int block){
+    ;
+}*/
 
 // internal auxiliary function
 int isface(char c) {
@@ -127,54 +377,54 @@ int isface(char c) {
 void trans_init(int *trans[4][3], cube c, enum rotary rot) {
     //面编号:U 1,D 2,F 3,B 4,L 5,R 6
     //对应到数组下标时减一
-    int focus_face=(rot-(rot%4))/4+1; //旋转的焦点面
+    int focus_face = (rot - (rot % 4)) / 4 + 1; //旋转的焦点面
     //焦点面相邻的4个面---优先从U和F开始,顺时针遍历
-    int adjacent_face[6][4]={
-            {3,5,4,6},
-            {3,6,4,5},
-            {1,6,2,5},
-            {1,5,2,6},
-            {1,3,2,4},
-            {1,4,2,3}
+    int adjacent_face[6][4] = {
+            {3, 5, 4, 6},
+            {3, 6, 4, 5},
+            {1, 6, 2, 5},
+            {1, 5, 2, 6},
+            {1, 3, 2, 4},
+            {1, 4, 2, 3}
     };
     //相邻面需要变换的色块编号---[0]存所在行,[1-3]存所在列
-    int trans_list[6][4][4]={
+    int trans_list[6][4][4] = {
             {
-                    {3,3,2,1},
-                    {1,1,2,3},
-                    {1,1,2,3},
-                    {1,1,2,3},
-                },
+                    {3, 3, 2, 1},
+                    {1, 1, 2, 3},
+                    {1, 1, 2, 3},
+                    {1, 1, 2, 3},
+            },
             {
-                    {3,3,2,1},
-                    {3,3,2,1},
-                    {3,3,2,1},
-                    {3,3,2,1}
-                },
+                    {3, 3, 2, 1},
+                    {3, 3, 2, 1},
+                    {3, 3, 2, 1},
+                    {3, 3, 2, 1}
+            },
             {
                     {3,},
                     {},
                     {},
                     {}
-                },
+            },
             {
                     {},
                     {},
                     {},
                     {}
-                },
+            },
             {
                     {},
                     {},
                     {},
                     {}
-                },
+            },
             {
                     {},
                     {},
                     {},
                     {}
-                }
+            }
     };
 
 }
