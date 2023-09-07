@@ -224,8 +224,8 @@ void formular_input(formula f) {
     //宁可代码乱点也要逻辑清晰
     memset(f, 0, sizeof(formula));
     printf("Enter a formula and separate each step with a space\n");
-    printf("Tip: The format of the operation is like R2 R2_ R\n");
-    printf("'_' represents a counterclockwise rotation\n>>> ");
+    printf("Tip: The format of the operation is like R2 R2' R\n");
+    printf("['] represents a counterclockwise rotation\n>>> ");
     char c;
     int idx = 0, face;
     while ((c = getchar()) != '\n') {
