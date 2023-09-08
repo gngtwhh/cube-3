@@ -27,7 +27,7 @@ typedef enum rotary formula[MAX_FORMULA_LEN];
 
 // initialization and result processing
 void cube_init(cube c); // initialize the Rubik's cube
-void cube_scramble(cube *c, formula *f); // scramble the Rubik's cube
+void cube_scramble(cube c, formula f); // scramble the Rubik's cube
 
 // rotary operations
 void cube_rotating(cube c,enum rotary rot); // rotating Rubik's cube
