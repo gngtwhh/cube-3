@@ -38,11 +38,13 @@ int main() {
             formula_get_rand(f_scramble);
             formular_output(f_scramble);
             cube_scramble(cube1, f_scramble);
+            cube_print(cube1);
             while (!cube_isorigin(cube1)) {
                 int idx = 0;
                 formular_input(rotate);
-                while (f_scramble[idx] != END) {
-                    cube_rotating(cube1, f_scramble[idx]);
+                while (rotate[idx] != END) {
+                    cube_rotating(cube1, rotate[idx]);
+
                     ++idx;
                 }
                 cube_print(cube1);

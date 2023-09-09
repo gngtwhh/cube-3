@@ -6,13 +6,13 @@
 #include "cube_3.h"
 
 // Check whether the cube is restored
-int cube_isorigin(cube c){
+int cube_isorigin(cube c) {
     // 创建一个还原好的魔方
     cube cube_origin;
     cube_init(cube_origin);
     int flag;
     // 直接逐字节进行比较
-    flag=memcmp(c,cube_origin,sizeof(cube));
+    flag = memcmp(c, cube_origin, sizeof(cube));
     return !flag;
 }
 
@@ -28,8 +28,12 @@ void cube_init(cube c) {
 }
 
 // scramble the Rubik's cube
-void cube_scramble(cube c, formula f){
-    ;
+void cube_scramble(cube c, formula f) {
+    int i = 0;
+    while (f[i] != END) {
+        cube_rotating(c, f[i]);
+        ++i;
+    }
 }
 
 // rotary operations
@@ -237,7 +241,7 @@ void focus_face_anticlockwise_90(cube c, int focus_face) {
 }
 
 // External interface of the automatic restore function
-void cube_auto_restore(cube c,formula restore){
+void cube_auto_restore(cube c, formula restore) {
     ;
 }
 
@@ -312,8 +316,11 @@ void formular_output(formula f) {
 void formula_get_rand(formula f) {
     int formula_len = 20; // 打乱公式的长度,默认为20
     srand((unsigned long) time(NULL));
-    for (int i = 0; i < 20; ++i) {
+    for (int i = 0; i < formula_len; ++i) {
         f[i] = rand() % 24; // The maximum valid value of [enum rotary] is 24
+        if (((f[i] - (f[i] % 4)) / 4 + 1) -
+            ((f[i - 1] - (f[i - 1] % 4)) / 4 + 1) == 0)
+            --i;
     }
     f[formula_len] = END;
 }
