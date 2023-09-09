@@ -25,6 +25,9 @@ enum rotary {
 #define MAX_FORMULA_LEN 20
 typedef enum rotary formula[MAX_FORMULA_LEN];
 
+// logical judgment
+int cube_isorigin(cube c); // Check whether the cube is restored
+
 // initialization and result processing
 void cube_init(cube c); // initialize the Rubik's cube
 void cube_scramble(cube c, formula f); // scramble the Rubik's cube
@@ -36,19 +39,21 @@ void anticlockwise_90(cube c,int focus_face); // anticlockwise rotate 90
 void rotate_180(cube c,int focus_face); // rotate 180
 void focus_face_anticlockwise_90(cube c,int focus_face); // The square matrix rotates anticlockwise
 
+// Automatically restore Rubik's cube
+void cube_auto_restore(cube c,formula restore); // External interface of the automatic restore function
+
 // formula operations
 void formular_input(formula f); // enter a formula and return a formula object
 void formular_output(formula f); // output a formula
+void formula_get_rand(formula f); // get random formula to scramble the cube
 
 // cube I/O functions
 void cube_print(cube c); // print the cube as 3D img
-int get_color(int block); // get color by block id
+/*int get_color(int block); // get color by block id
 void set_color(int i); // set console color
-char *get_color_str(int block); //return color str
+char *get_color_str(int block); //return color str*/
 
 // internal auxiliary function
 int isface(char c); // determines whether the input character is the correct face
-void trans_init(int* trans[4][3],cube c,enum rotary rot); // init rotating trans array
-void face_init(int (*face)[3][3], cube c,enum rotary rot); //init rotating face
 
 #endif //CUBE_3_CUBE_3_H

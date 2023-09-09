@@ -1,7 +1,20 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+#include <time.h>
 #include <windows.h>
 #include "cube_3.h"
+
+// Check whether the cube is restored
+int cube_isorigin(cube c){
+    // 创建一个还原好的魔方
+    cube cube_origin;
+    cube_init(cube_origin);
+    int flag;
+    // 直接逐字节进行比较
+    flag=memcmp(c,cube_origin,sizeof(cube));
+    return !flag;
+}
 
 // initialize the Rubik's cube
 void cube_init(cube c) {
@@ -12,6 +25,11 @@ void cube_init(cube c) {
             }
         }
     }
+}
+
+// scramble the Rubik's cube
+void cube_scramble(cube c, formula f){
+    ;
 }
 
 // rotary operations
@@ -212,10 +230,15 @@ void focus_face_anticlockwise_90(cube c, int focus_face) {
     int i, j, temp[3][3];
     for (i = 0; i < 3; ++i)
         for (j = 0; j < 3; ++j)
-            temp[3 - j - 1][i] = c[focus_face][i+1][j+1];
+            temp[3 - j - 1][i] = c[focus_face][i + 1][j + 1];
     for (i = 0; i < 3; ++i)
         for (j = 0; j < 3; ++j)
-            c[focus_face][i+1][j+1] = temp[i][j];
+            c[focus_face][i + 1][j + 1] = temp[i][j];
+}
+
+// External interface of the automatic restore function
+void cube_auto_restore(cube c,formula restore){
+    ;
 }
 
 // enter a formula and return a formula object
@@ -285,6 +308,16 @@ void formular_output(formula f) {
     putchar('\n');
 }
 
+// get random formula to scramble the cube
+void formula_get_rand(formula f) {
+    int formula_len = 20; // 打乱公式的长度,默认为20
+    srand((unsigned long) time(NULL));
+    for (int i = 0; i < 20; ++i) {
+        f[i] = rand() % 24; // The maximum valid value of [enum rotary] is 24
+    }
+    f[formula_len] = END;
+}
+
 //print the cube as 3D img
 void cube_print(cube c) {
     printf("                            ________________\n"
@@ -321,7 +354,7 @@ void cube_print(cube c) {
            c[6][1][3],
 
            c[1][3][1], c[1][3][2], c[1][3][3],
-           c[6][1][2],c[6][2][3], c[6][1][1],
+           c[6][1][2], c[6][2][3], c[6][1][1],
 
            c[5][1][1], c[5][1][2], c[5][1][3], c[3][1][1], c[3][1][2], c[3][1][3],
            c[6][2][2], c[6][3][3], c[6][2][1],
@@ -371,60 +404,4 @@ int isface(char c) {
         default:
             return 0;
     }
-}
-
-// init trans array
-void trans_init(int *trans[4][3], cube c, enum rotary rot) {
-    //面编号:U 1,D 2,F 3,B 4,L 5,R 6
-    //对应到数组下标时减一
-    int focus_face = (rot - (rot % 4)) / 4 + 1; //旋转的焦点面
-    //焦点面相邻的4个面---优先从U和F开始,顺时针遍历
-    int adjacent_face[6][4] = {
-            {3, 5, 4, 6},
-            {3, 6, 4, 5},
-            {1, 6, 2, 5},
-            {1, 5, 2, 6},
-            {1, 3, 2, 4},
-            {1, 4, 2, 3}
-    };
-    //相邻面需要变换的色块编号---[0]存所在行,[1-3]存所在列
-    int trans_list[6][4][4] = {
-            {
-                    {3, 3, 2, 1},
-                    {1, 1, 2, 3},
-                    {1, 1, 2, 3},
-                    {1, 1, 2, 3},
-            },
-            {
-                    {3, 3, 2, 1},
-                    {3, 3, 2, 1},
-                    {3, 3, 2, 1},
-                    {3, 3, 2, 1}
-            },
-            {
-                    {3,},
-                    {},
-                    {},
-                    {}
-            },
-            {
-                    {},
-                    {},
-                    {},
-                    {}
-            },
-            {
-                    {},
-                    {},
-                    {},
-                    {}
-            },
-            {
-                    {},
-                    {},
-                    {},
-                    {}
-            }
-    };
-
 }

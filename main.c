@@ -7,12 +7,13 @@
 int main() {
     cube cube1;
     cube_init(cube1);
-    formula f_scramble, rotate,restore;
+    formula f_scramble, rotate, restore;
 
     while (1) {
         print_menu();
         char c = getchar();
-        if (c == 1) {
+        getchar(); // 吸收回车
+        if (c == '1') {
             // 指定公式打乱
             printf("please enter the scramble formula:\n>>> ");
             formular_input(f_scramble);
@@ -21,6 +22,7 @@ int main() {
                 continue;
             }
             cube_scramble(cube1, f_scramble);
+            cube_print(cube1);
             while (!cube_isorigin(cube1)) {
                 int idx = 0;
                 formular_input(rotate);
@@ -30,7 +32,8 @@ int main() {
                 }
                 cube_print(cube1);
             }
-        } else if (c == 2) {
+            printf("Restore successfully!!!\n");
+        } else if (c == '2') {
             // 随机打乱
             formula_get_rand(f_scramble);
             formular_output(f_scramble);
@@ -44,7 +47,8 @@ int main() {
                 }
                 cube_print(cube1);
             }
-        } else if (c == 3) {
+            printf("Restore successfully!!!\n");
+        } else if (c == '3') {
             //自动还原
             printf("please enter the scramble formula:\n>>> ");
             formular_input(f_scramble);
@@ -54,12 +58,11 @@ int main() {
             }
             cube_scramble(cube1, f_scramble);
             printf("restoring...");
-            cube_auto_restore(cube1,restore);
+            cube_auto_restore(cube1, restore);
             formular_output(restore);
-        }else if(c==4){
+        } else if (c == '4') {
             break;
-        }
-        else{
+        } else {
             printf("error!");
             Sleep(1000);
             system("cls");
