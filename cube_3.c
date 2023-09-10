@@ -313,8 +313,33 @@ void formula_output(formula f) {
 }
 
 // reverse a formula
-void formula_reverse(formula f_origin,formula f_reversed){
-    ;
+void formula_reverse(formula f_origin, formula f_reversed) {
+    int idx_ogn = 0, idx_rev = 0;
+    int temp_rot;
+    while (f_origin[idx_ogn++] != END);
+    idx_ogn -= 2;
+    /*
+     enum rotary {
+        U, U_, U2, U2_,
+        D, D_, D2, D2_,
+        F, F_, F2, F2_,
+        B, B_, B2, B2_,
+        L, L_, L2, L2_,
+        R, R_, R2, R2_,
+        END
+    };
+     */
+    while (idx_ogn >= 0) {
+        temp_rot = f_origin[idx_ogn--];
+        if (temp_rot % 4 == 0 || temp_rot % 4 == 2) {
+            // 顺时针
+            f_reversed[idx_rev++] = temp_rot + 1;
+        } else {
+            // 逆时针
+            f_reversed[idx_rev++] = temp_rot - 1;
+        }
+    }
+    f_reversed[idx_rev] = END;
 }
 
 // get random formula to scramble the cube

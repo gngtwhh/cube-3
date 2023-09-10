@@ -73,6 +73,8 @@ int main() {
             formula_input(f_scramble);
             formula_reverse(f_scramble, f_reversed);
             formula_output(f_reversed);
+            printf("press anykey to continue...");
+            getchar();
         } else if (c == '5') {
             break;
         } else {
