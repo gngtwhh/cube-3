@@ -43,8 +43,9 @@ void focus_face_anticlockwise_90(cube c,int focus_face); // The square matrix ro
 void cube_auto_restore(cube c,formula restore); // External interface of the automatic restore function
 
 // formula operations
-void formular_input(formula f); // enter a formula and return a formula object
-void formular_output(formula f); // output a formula
+void formula_input(formula f); // enter a formula and return a formula object
+void formula_output(formula f); // output a formula
+void formula_reverse(formula f_origin,formula f_reversed); // reverse a formula
 void formula_get_rand(formula f); // get random formula to scramble the cube
 
 // cube I/O functions

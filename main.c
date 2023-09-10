@@ -7,7 +7,7 @@
 int main() {
     cube cube1;
     cube_init(cube1);
-    formula f_scramble, rotate, restore;
+    formula f_scramble, rotate, restore, f_reversed;
 
     while (1) {
         print_menu();
@@ -16,44 +16,48 @@ int main() {
         if (c == '1') {
             // 指定公式打乱
             printf("please enter the scramble formula:\n>>> ");
-            formular_input(f_scramble);
+            formula_input(f_scramble);
             if (f_scramble[0] == END) {
                 printf("error: scramble formula is empty!");
                 continue;
             }
+            formula_output(f_scramble);
             cube_scramble(cube1, f_scramble);
             cube_print(cube1);
             while (!cube_isorigin(cube1)) {
                 int idx = 0;
-                formular_input(rotate);
-                while (f_scramble[idx] != END) {
-                    cube_rotating(cube1, f_scramble[idx]);
+                formula_input(rotate);
+                while (rotate[idx] != END) {
+                    cube_rotating(cube1, rotate[idx]);
                     ++idx;
                 }
                 cube_print(cube1);
             }
             printf("Restore successfully!!!\n");
+            printf("press anykey to continue...");
+            getchar();
         } else if (c == '2') {
             // 随机打乱
             formula_get_rand(f_scramble);
-            formular_output(f_scramble);
+            formula_output(f_scramble);
             cube_scramble(cube1, f_scramble);
             cube_print(cube1);
             while (!cube_isorigin(cube1)) {
                 int idx = 0;
-                formular_input(rotate);
+                formula_input(rotate);
                 while (rotate[idx] != END) {
                     cube_rotating(cube1, rotate[idx]);
-
                     ++idx;
                 }
                 cube_print(cube1);
             }
             printf("Restore successfully!!!\n");
+            printf("press anykey to continue...");
+            getchar();
         } else if (c == '3') {
             //自动还原
             printf("please enter the scramble formula:\n>>> ");
-            formular_input(f_scramble);
+            formula_input(f_scramble);
             if (f_scramble[0] == END) {
                 printf("error: scramble formula is empty!");
                 continue;
@@ -61,8 +65,15 @@ int main() {
             cube_scramble(cube1, f_scramble);
             printf("restoring...");
             cube_auto_restore(cube1, restore);
-            formular_output(restore);
+            printf("formula generate done...");
+            formula_output(restore);
+            printf("press anykey to continue...");
+            getchar();
         } else if (c == '4') {
+            formula_input(f_scramble);
+            formula_reverse(f_scramble, f_reversed);
+            formula_output(f_reversed);
+        } else if (c == '5') {
             break;
         } else {
             printf("error!");

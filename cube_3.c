@@ -246,7 +246,7 @@ void cube_auto_restore(cube c, formula restore) {
 }
 
 // enter a formula and return a formula object
-void formular_input(formula f) {
+void formula_input(formula f) {
     //不使用字符数组对应是要方便程序找到公式,下标转换的逻辑有点乱
     //宁可代码乱点也要逻辑清晰
     memset(f, 0, sizeof(formula));
@@ -293,7 +293,7 @@ void formular_input(formula f) {
     f[idx] = END;
 }
 
-void formular_output(formula f) {
+void formula_output(formula f) {
     //因为使用了枚举进行映射,这里要使用一个对应的字符串数组来进行反映射
     const char *rotary_str[24] = {
             "U", "U'", "U2", "U2'",
@@ -312,9 +312,14 @@ void formular_output(formula f) {
     putchar('\n');
 }
 
+// reverse a formula
+void formula_reverse(formula f_origin,formula f_reversed){
+    ;
+}
+
 // get random formula to scramble the cube
 void formula_get_rand(formula f) {
-    int formula_len = 20; // 打乱公式的长度,默认为20
+    int formula_len = 3; // 打乱公式的长度,默认为20
     srand((unsigned long) time(NULL));
     for (int i = 0; i < formula_len; ++i) {
         f[i] = rand() % 24; // The maximum valid value of [enum rotary] is 24
