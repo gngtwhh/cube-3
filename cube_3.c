@@ -344,7 +344,7 @@ void formula_reverse(formula f_origin, formula f_reversed) {
 
 // get random formula to scramble the cube
 void formula_get_rand(formula f) {
-    int formula_len = 3; // 打乱公式的长度,默认为20
+    int formula_len = 20; // 打乱公式的长度,默认为20
     srand((unsigned long) time(NULL));
     for (int i = 0; i < formula_len; ++i) {
         f[i] = rand() % 24; // The maximum valid value of [enum rotary] is 24
