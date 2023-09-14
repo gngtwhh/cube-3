@@ -43,7 +43,7 @@ void focus_face_anticlockwise_90(cube c,int focus_face); // The square matrix ro
 void formula_input(formula f); // enter a formula and return a formula object
 void formula_get_by_id(formula f,int id); // get scramble formula by id
 int formula_count(formula f); // count step of a formula
-int formula_cmp(formula f_scramble,formula rotate); // compare two formula
+int formula_cmp(formula f_a, formula f_b); // compare two formula
 void formula_reverse(formula f_origin, formula f_reversed); // reverse a formula
 
 // cube I/O functions

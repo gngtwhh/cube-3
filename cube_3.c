@@ -1,8 +1,5 @@
 #include <stdio.h>
 #include <string.h>
-#include <stdlib.h>
-#include <time.h>
-#include <windows.h>
 #include "cube_3.h"
 
 // Check whether the cube is restored
@@ -368,33 +365,20 @@ void formula_reverse(formula f_origin, formula f_reversed) {
 }
 
 // compare two formula
-int formula_cmp(formula f_scramble, formula rotate) {
+int formula_cmp(formula f_a, formula f_b) {
     int idx1 = 0, idx2 = 0;
-    while (f_scramble[idx1] != END && rotate[idx2] != END) {
-        if (f_scramble[idx1] != rotate[idx2])
+    while (f_a[idx1] != END && f_b[idx2] != END) {
+        if (f_a[idx1] != f_b[idx2])
             return 1;
         idx1++;
         idx2++;
     }
-    if (f_scramble[idx1] != END || rotate[idx2] != END)
+    if (f_a[idx1] != END || f_b[idx2] != END)
         return 1;
     return 0;
 }
 
 
-
-// get random formula to scramble the cube
-void formula_get_rand(formula f) {
-    int formula_len = 20; // 打乱公式的长度,默认为20
-    srand((unsigned long) time(NULL));
-    for (int i = 0; i < formula_len; ++i) {
-        f[i] = rand() % 24; // The maximum valid value of [enum rotary] is 24
-        if (((f[i] - (f[i] % 4)) / 4 + 1) -
-            ((f[i - 1] - (f[i - 1] % 4)) / 4 + 1) == 0)
-            --i;
-    }
-    f[formula_len] = END;
-}
 
 //print the cube as 3D img
 void cube_print(cube c) {
@@ -445,24 +429,6 @@ void cube_print(cube c) {
            c[2][3][1], c[2][3][2], c[2][3][3]
     );
 }
-
-/*// get color by block id
-int getcolor(int block){
-    //6-黄,7-白,3-蓝,2-绿,12-橙,5-红
-    int trans_clr[7]={0,6,7,3,2,12,5};
-    return trans_clr[block];
-}
-
-// set console color
-void set_color(int i) {//更改文字颜色
-    //SetConsoleTextAttribute是API设置控制台窗口字体颜色和背景色的函数
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), i);
-}
-
-// return color str
-char *get_color_str(int block){
-    ;
-}*/
 
 // internal auxiliary function
 int isface(char c) {

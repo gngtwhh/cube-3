@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include "cube_3.h"
 #include "menu.h"
 
@@ -53,8 +52,9 @@ int main() {
         cube_print(cube1);
         formula_reverse(rotate,f_reverse);
 
-        if (cube_isorigin(cube1) && !formula_cmp(f_scramble,rotate))
+        if (cube_isorigin(cube1) && !formula_cmp(f_scramble,f_reverse)) {
             printf("Restore successfully!!!You reversed the formula!!!\n");
+        }
         else if (cube_isorigin(cube1) && formula_cmp(f_scramble,f_reverse)) {
             printf("Restore successfully!!!But not reverse!!!\n");
         } else
@@ -66,6 +66,6 @@ int main() {
     }
 
     printf("press anykey to continue...");
-    system("pause");
+    getchar();
     return 0;
 }
