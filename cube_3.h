@@ -22,7 +22,7 @@ enum rotary {
 };
 
 // formula data structure
-#define MAX_FORMULA_LEN 20
+#define MAX_FORMULA_LEN 40
 typedef enum rotary formula[MAX_FORMULA_LEN];
 
 // logical judgment
@@ -39,20 +39,14 @@ void anticlockwise_90(cube c,int focus_face); // anticlockwise rotate 90
 void rotate_180(cube c,int focus_face); // rotate 180
 void focus_face_anticlockwise_90(cube c,int focus_face); // The square matrix rotates anticlockwise
 
-// Automatically restore Rubik's cube
-void cube_auto_restore(cube c,formula restore); // External interface of the automatic restore function
-
 // formula operations
 void formula_input(formula f); // enter a formula and return a formula object
-void formula_output(formula f); // output a formula
-void formula_reverse(formula f_origin,formula f_reversed); // reverse a formula
-void formula_get_rand(formula f); // get random formula to scramble the cube
+void formula_get_by_id(formula f,int id); // get scramble formula by id
+int formula_count(formula f); // count step of a formula
+int formula_cmp(formula f_scramble,formula rotate); // compare two formula
 
 // cube I/O functions
 void cube_print(cube c); // print the cube as 3D img
-/*int get_color(int block); // get color by block id
-void set_color(int i); // set console color
-char *get_color_str(int block); //return color str*/
 
 // internal auxiliary function
 int isface(char c); // determines whether the input character is the correct face

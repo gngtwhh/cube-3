@@ -312,6 +312,45 @@ void formula_output(formula f) {
     putchar('\n');
 }
 
+// get scramble formula by id
+void formula_get_by_id(formula f, int id) {
+    formula temp[4] = {
+            {23, 3,  4,  8,  18, 9,  12, 18, 13, 7,  20, 11, 13, 22, 14, 6,  8,  18, 4,  14, 24},
+            {6,  22, 7,  13, 1,  4,  2,  8,  22, 19, 6,  10, 19, 21, 19, 7,  17, 8,  7,  12, 24},
+            {5,  15, 19, 2,  5,  17, 12, 9,  7,  12, 18, 5,  12, 3,  11, 14, 5,  18, 6,  22, 24},
+            {20, 12, 7,  21, 14, 23, 19, 13, 3,  18, 7,  3,  22, 0,  8,  1,  18, 7,  18, 11, 24},
+    };
+    int idx = 0;
+    while (temp[id - 1][idx] != END) {
+        f[idx] = temp[id - 1][idx];
+        idx++;
+    }
+    f[idx] = END;
+}
+
+// count step of a formula
+int formula_count(formula f) {
+    int idx = 0;
+    int cnt = 0;
+    while (f[idx++] != END)
+        ++cnt;
+    return cnt;
+}
+
+// compare two formula
+int formula_cmp(formula f_scramble, formula rotate) {
+    int idx1 = 0, idx2 = 0;
+    while (f_scramble[idx1] != END && rotate[idx2] != END) {
+        if (f_scramble[idx1] != rotate[idx2])
+            return 1;
+        idx1++;
+        idx2++;
+    }
+    if (f_scramble[idx1] != END || rotate[idx2] != END)
+        return 1;
+    return 0;
+}
+
 // reverse a formula
 void formula_reverse(formula f_origin, formula f_reversed) {
     int idx_ogn = 0, idx_rev = 0;
