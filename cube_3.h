@@ -44,6 +44,7 @@ void formula_input(formula f); // enter a formula and return a formula object
 void formula_get_by_id(formula f,int id); // get scramble formula by id
 int formula_count(formula f); // count step of a formula
 int formula_cmp(formula f_scramble,formula rotate); // compare two formula
+void formula_reverse(formula f_origin, formula f_reversed); // reverse a formula
 
 // cube I/O functions
 void cube_print(cube c); // print the cube as 3D img

@@ -34,7 +34,7 @@ R2 B' R' B R D F U' L2 U' D L D' F2 U B2 R2 U' L2 U2
 int main() {
     cube cube1;
     cube_init(cube1);
-    formula f_scramble, rotate;
+    formula f_scramble, rotate,f_reverse;
 
     print_menu();
     char c = getchar();
@@ -51,9 +51,11 @@ int main() {
             ++idx;
         }
         cube_print(cube1);
-        if (cube_isorigin(cube1) && formula_cmp(f_scramble,rotate))
-            printf("Restore successfully!!!You used the minimum number of steps!!!\n");
-        else if (cube_isorigin(cube1) && !formula_cmp(rotate)) {
+        formula_reverse(rotate,f_reverse);
+
+        if (cube_isorigin(cube1) && !formula_cmp(f_scramble,rotate))
+            printf("Restore successfully!!!You reversed the formula!!!\n");
+        else if (cube_isorigin(cube1) && formula_cmp(f_scramble,f_reverse)) {
             printf("Restore successfully!!!But not reverse!!!\n");
         } else
             printf("Restore failed!!!\n");

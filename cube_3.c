@@ -337,20 +337,6 @@ int formula_count(formula f) {
     return cnt;
 }
 
-// compare two formula
-int formula_cmp(formula f_scramble, formula rotate) {
-    int idx1 = 0, idx2 = 0;
-    while (f_scramble[idx1] != END && rotate[idx2] != END) {
-        if (f_scramble[idx1] != rotate[idx2])
-            return 1;
-        idx1++;
-        idx2++;
-    }
-    if (f_scramble[idx1] != END || rotate[idx2] != END)
-        return 1;
-    return 0;
-}
-
 // reverse a formula
 void formula_reverse(formula f_origin, formula f_reversed) {
     int idx_ogn = 0, idx_rev = 0;
@@ -380,6 +366,22 @@ void formula_reverse(formula f_origin, formula f_reversed) {
     }
     f_reversed[idx_rev] = END;
 }
+
+// compare two formula
+int formula_cmp(formula f_scramble, formula rotate) {
+    int idx1 = 0, idx2 = 0;
+    while (f_scramble[idx1] != END && rotate[idx2] != END) {
+        if (f_scramble[idx1] != rotate[idx2])
+            return 1;
+        idx1++;
+        idx2++;
+    }
+    if (f_scramble[idx1] != END || rotate[idx2] != END)
+        return 1;
+    return 0;
+}
+
+
 
 // get random formula to scramble the cube
 void formula_get_rand(formula f) {
