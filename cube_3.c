@@ -1,3 +1,6 @@
+//
+// Created by WAHAHA on 2023/9/8.
+//
 #include <stdio.h>
 #include <string.h>
 #include "cube_3.h"

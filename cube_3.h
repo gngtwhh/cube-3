@@ -1,4 +1,6 @@
 //
+// Created by WAHAHA on 2023/9/8.
+//
 // Contains declarations of related data types and
 // computation functions for the Rubik's cube
 //

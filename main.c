@@ -1,9 +1,12 @@
+//
+// Created by WAHAHA on 2023/9/8.
+//
 #include <stdio.h>
 #include "cube_3.h"
 #include "menu.h"
 
 /*
- END=24
+END=24
 
 1
 R2' U2' D F L2 F' B L2 B' D2' R F2' B' R2 B2 D2 F L2 D B2
