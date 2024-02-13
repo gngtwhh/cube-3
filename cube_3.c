@@ -7,11 +7,11 @@
 
 // Check whether the cube is restored
 int cube_isorigin(cube c) {
-    // åˆ›å»ºä¸€ä¸ªè¿˜åŸå¥½çš„é­”æ–¹
+    // ´´½¨Ò»¸ö»¹Ô­ºÃµÄÄ§·½
     cube cube_origin;
     cube_init(cube_origin);
     int flag;
-    // ç›´æ¥é€å­—èŠ‚è¿›è¡Œæ¯”è¾ƒ
+    // Ö±½ÓÖğ×Ö½Ú½øĞĞ±È½Ï
     flag = memcmp(c, cube_origin, sizeof(cube));
     return !flag;
 }
@@ -39,7 +39,7 @@ void cube_scramble(cube c, formula f) {
 // rotary operations
 // rotating Rubik's cube
 void cube_rotating(cube c, enum rotary rot) {
-    int focus_face = (rot - (rot % 4)) / 4 + 1; //æ—‹è½¬çš„ç„¦ç‚¹é¢
+    int focus_face = (rot - (rot % 4)) / 4 + 1; //Ğı×ªµÄ½¹µãÃæ
     switch (rot % 4) {
         case 0:
             clockwise_90(c, focus_face);
@@ -47,7 +47,7 @@ void cube_rotating(cube c, enum rotary rot) {
         case 1:
             anticlockwise_90(c, focus_face);
             break;
-        case 2://å‘ä¸‹"è·Ÿéš"(?)
+        case 2://ÏòÏÂ"¸úËæ"(?)
         case 3:
             rotate_180(c, focus_face);
             break;
@@ -66,7 +66,7 @@ void clockwise_90(cube c, int focus_face) {
      */
     int temp[3];
 
-    //æ—‹è½¬ç„¦ç‚¹é¢ä¾§æ£±
+    //Ğı×ª½¹µãÃæ²àÀâ
     switch (focus_face) {
         case 1: {
             //backup 3
@@ -208,14 +208,14 @@ void clockwise_90(cube c, int focus_face) {
             break;
     }
 
-    //æ—‹è½¬ç„¦ç‚¹é¢çŸ©é˜µ
+    //Ğı×ª½¹µãÃæ¾ØÕó
     for (int j = 0; j < 3; ++j)
         focus_face_anticlockwise_90(c, focus_face);
 }
 
 // anticlockwise rotate 90
 void anticlockwise_90(cube c, int focus_face) {
-    //å¾…ä¼˜åŒ–
+    //´ıÓÅ»¯
     for (int i = 0; i < 3; ++i) {
         clockwise_90(c, focus_face);
     }
@@ -223,7 +223,7 @@ void anticlockwise_90(cube c, int focus_face) {
 
 // rotate 180
 void rotate_180(cube c, int focus_face) {
-    //å¾…ä¼˜åŒ–
+    //´ıÓÅ»¯
     for (int i = 0; i < 2; ++i) {
         clockwise_90(c, focus_face);
     }
@@ -247,8 +247,8 @@ void cube_auto_restore(cube c, formula restore) {
 
 // enter a formula and return a formula object
 void formula_input(formula f) {
-    //ä¸ä½¿ç”¨å­—ç¬¦æ•°ç»„å¯¹åº”æ˜¯è¦æ–¹ä¾¿ç¨‹åºæ‰¾åˆ°å…¬å¼,ä¸‹æ ‡è½¬æ¢çš„é€»è¾‘æœ‰ç‚¹ä¹±
-    //å®å¯ä»£ç ä¹±ç‚¹ä¹Ÿè¦é€»è¾‘æ¸…æ™°
+    //²»Ê¹ÓÃ×Ö·ûÊı×é¶ÔÓ¦ÊÇÒª·½±ã³ÌĞòÕÒµ½¹«Ê½,ÏÂ±ê×ª»»µÄÂß¼­ÓĞµãÂÒ
+    //Äş¿É´úÂëÂÒµãÒ²ÒªÂß¼­ÇåÎú
     memset(f, 0, sizeof(formula));
     printf("Enter a formula and separate each step with a space\n");
     printf("Tip: The format of the operation is like R2 R2' R\n");
@@ -258,32 +258,32 @@ void formula_input(formula f) {
     while ((c = getchar()) != '\n') {
         face = isface(c);
         if (face) {
-            //è·å–åˆ°ä¸€ä¸ªæ“ä½œé¢,æ¥ä¸‹æ¥è§£æå…·ä½“è½¬åŠ¨æ–¹å¼
+            //»ñÈ¡µ½Ò»¸ö²Ù×÷Ãæ,½ÓÏÂÀ´½âÎö¾ßÌå×ª¶¯·½Ê½
             c = getchar();
             if (c == ' ') {
-                //é¡ºæ—¶é’ˆ90åº¦
+                //Ë³Ê±Õë90¶È
                 f[idx++] = (face - 1) * 4 + 0;
             } else if (c == '\'') {
-                //é€†æ—¶é’ˆ90åº¦
+                //ÄæÊ±Õë90¶È
                 f[idx++] = (face - 1) * 4 + 1;
             } else if (c == '2') {
-                //ç¡®å®šä¸º180åº¦,ç»§ç»­åˆ¤æ–­é¡ºé€†---æ­¤æ—¶å®é™…é¡ºé€†éƒ½å¯,
-                //å•çº¯çš„ä¸ºäº†è¿›è¡Œå…¼å®¹å…¬å¼å’Œä»£ç é€»è¾‘
+                //È·¶¨Îª180¶È,¼ÌĞøÅĞ¶ÏË³Äæ---´ËÊ±Êµ¼ÊË³Äæ¶¼¿É,
+                //µ¥´¿µÄÎªÁË½øĞĞ¼æÈİ¹«Ê½ºÍ´úÂëÂß¼­
                 char c2 = getchar();
                 if (c2 == ' ') {
-                    //é¡ºæ—¶é’ˆ180åº¦
+                    //Ë³Ê±Õë180¶È
                     f[idx++] = (face - 1) * 4 + 2;
                 } else if (c2 == '\'') {
-                    //é€†æ—¶é’ˆ180åº¦
+                    //ÄæÊ±Õë180¶È
                     f[idx++] = (face - 1) * 4 + 3;
                 } else if (c2 == '\n') {
-                    //æ­¤æ—¶å› ä¸ºæœ€åä»ç„¶æœ‰ä¸€ä¸ªæ“ä½œæ²¡æœ‰è®°å½•,æ‰€ä»¥è¦å¤šè®°å½•ä¸€æ¬¡
+                    //´ËÊ±ÒòÎª×îºóÈÔÈ»ÓĞÒ»¸ö²Ù×÷Ã»ÓĞ¼ÇÂ¼,ËùÒÔÒª¶à¼ÇÂ¼Ò»´Î
                     f[idx++] = (face - 1) * 4 + 2;
                     f[idx++] = END;
                     return;
                 }
             } else if (c == '\n') {
-                //æ­¤æ—¶å› ä¸ºæœ€åä»ç„¶æœ‰ä¸€ä¸ªæ“ä½œæ²¡æœ‰è®°å½•,æ‰€ä»¥è¦å¤šè®°å½•ä¸€æ¬¡
+                //´ËÊ±ÒòÎª×îºóÈÔÈ»ÓĞÒ»¸ö²Ù×÷Ã»ÓĞ¼ÇÂ¼,ËùÒÔÒª¶à¼ÇÂ¼Ò»´Î
                 f[idx++] = (face - 1) * 4 + 0;
                 f[idx++] = END;
                 return;
@@ -294,7 +294,7 @@ void formula_input(formula f) {
 }
 
 void formula_output(formula f) {
-    //å› ä¸ºä½¿ç”¨äº†æšä¸¾è¿›è¡Œæ˜ å°„,è¿™é‡Œè¦ä½¿ç”¨ä¸€ä¸ªå¯¹åº”çš„å­—ç¬¦ä¸²æ•°ç»„æ¥è¿›è¡Œåæ˜ å°„
+    //ÒòÎªÊ¹ÓÃÁËÃ¶¾Ù½øĞĞÓ³Éä,ÕâÀïÒªÊ¹ÓÃÒ»¸ö¶ÔÓ¦µÄ×Ö·û´®Êı×éÀ´½øĞĞ·´Ó³Éä
     const char *rotary_str[24] = {
             "U", "U'", "U2", "U2'",
             "D", "D'", "D2", "D2'",
@@ -332,10 +332,10 @@ void formula_reverse(formula f_origin, formula f_reversed) {
     while (idx_ogn >= 0) {
         temp_rot = f_origin[idx_ogn--];
         if (temp_rot % 4 == 0 || temp_rot % 4 == 2) {
-            // é¡ºæ—¶é’ˆ
+            // Ë³Ê±Õë
             f_reversed[idx_rev++] = temp_rot + 1;
         } else {
-            // é€†æ—¶é’ˆ
+            // ÄæÊ±Õë
             f_reversed[idx_rev++] = temp_rot - 1;
         }
     }
@@ -344,7 +344,7 @@ void formula_reverse(formula f_origin, formula f_reversed) {
 
 // get random formula to scramble the cube
 void formula_get_rand(formula f) {
-    int formula_len = 20; // æ‰“ä¹±å…¬å¼çš„é•¿åº¦,é»˜è®¤ä¸º20
+    int formula_len = 20; // ´òÂÒ¹«Ê½µÄ³¤¶È,Ä¬ÈÏÎª20
     srand((unsigned long) time(NULL));
     for (int i = 0; i < formula_len; ++i) {
         f[i] = rand() % 24; // The maximum valid value of [enum rotary] is 24
@@ -404,24 +404,6 @@ void cube_print(cube c) {
            c[2][3][1], c[2][3][2], c[2][3][3]
     );
 }
-
-/*// get color by block id
-int getcolor(int block){
-    //6-é»„,7-ç™½,3-è“,2-ç»¿,12-æ©™,5-çº¢
-    int trans_clr[7]={0,6,7,3,2,12,5};
-    return trans_clr[block];
-}
-
-// set console color
-void set_color(int i) {//æ›´æ”¹æ–‡å­—é¢œè‰²
-    //SetConsoleTextAttributeæ˜¯APIè®¾ç½®æ§åˆ¶å°çª—å£å­—ä½“é¢œè‰²å’ŒèƒŒæ™¯è‰²çš„å‡½æ•°
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), i);
-}
-
-// return color str
-char *get_color_str(int block){
-    ;
-}*/
 
 // internal auxiliary function
 int isface(char c) {

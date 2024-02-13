@@ -12,9 +12,9 @@ int main() {
     while (1) {
         print_menu();
         char c = getchar();
-        getchar(); // 鍚告敹鍥炶溅
+        getchar(); // 吸收回车
         if (c == '1') {
-            // 鎸囧畾鍏紡鎵撲贡
+            // 指定公式打乱
             printf("please enter the scramble formula:\n>>> ");
             formula_input(f_scramble);
             if (f_scramble[0] == END) {
@@ -37,7 +37,7 @@ int main() {
             printf("press anykey to continue...");
             getchar();
         } else if (c == '2') {
-            // 闅忔満鎵撲贡
+            // 随机打乱
             formula_get_rand(f_scramble);
             formula_output(f_scramble);
             cube_scramble(cube1, f_scramble);
@@ -55,7 +55,7 @@ int main() {
             printf("press anykey to continue...");
             getchar();
         } else if (c == '3') {
-            //鑷姩杩樺師
+            //自动还原
             printf("please enter the scramble formula:\n>>> ");
             formula_input(f_scramble);
             if (f_scramble[0] == END) {
